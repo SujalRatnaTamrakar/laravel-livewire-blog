@@ -26,8 +26,8 @@ class PostsImport implements ToModel, WithHeadingRow, WithUpserts
     {
         $slug = Str::slug($row['title']);
 
-        while (Post::where('slug',$slug)->exists()){
-            $slug = $slug . '-' . Post::where('slug',$slug)->count();
+        if (Post::where('slug','LIKE','%'.$slug.'%')->exists()){
+            $slug = $slug . '-' . Post::where('slug','LIKE','%'.$slug.'%')->count();
         }
         return new Post([
             'title' => $row['title'],
