@@ -138,7 +138,7 @@
                         accept: '.xlsx, .csv'
                     },
                     showCancelButton: true,
-                    confirmButtonText: 'Look up',
+                    confirmButtonText: 'Import',
                     showLoaderOnConfirm: true,
                     preConfirm: (file) => {
                         if (!file) {
