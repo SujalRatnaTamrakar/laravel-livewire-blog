@@ -22,7 +22,7 @@ class PostTagImport implements ToCollection,WithHeadingRow
 
         foreach ($collection as $row){
             $post_slug = Str::slug($row['title']);
-            $post_count = Post::where('title',$row['title'])->where('content',$row['content'])->get();
+            $post_count = Post::where('title',$row['title'])->count();
             $tags = explode(',', $row['tags']);
             if($post_count>1){
                 $post_slug = $post_slug . '-' . ($post_count-1);

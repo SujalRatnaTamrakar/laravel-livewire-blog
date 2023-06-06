@@ -9,6 +9,10 @@ use App\Imports\CategoriesImport;
 use App\Imports\PostsImport;
 use App\Imports\PostTagImport;
 use App\Imports\TagsImport;
+use App\Jobs\ImportCategoriesJob;
+use App\Jobs\ImportPostsJob;
+use App\Jobs\ImportPostTagsJob;
+use App\Jobs\ImportTagsJob;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
@@ -143,10 +147,12 @@ class PostController extends Controller
     public function import(){
         try {
             DB::beginTransaction();
-            Excel::import(new TagsImport(),request()->file('file'));
-            Excel::import(new CategoriesImport(),request()->file('file'));
-            Excel::import(new PostsImport,request()->file('file'));
-            Excel::import(new PostTagImport(),request()->file('file'));
+            dispatch(new ImportTagsJob())
+                ->chain([
+                    new ImportCategoriesJob(),
+                    new ImportPostsJob(),
+                    new ImportPostTagsJob()
+                ]);
             DB::commit();
             return response()->json([
                 'error' => false,
@@ -154,6 +160,7 @@ class PostController extends Controller
             ],200);
         } catch (\Exception $exception){
             DB::rollBack();
+            dd($exception);
             return response()->json([
                 'error' => true,
                 'message' => $exception->getMessage()
