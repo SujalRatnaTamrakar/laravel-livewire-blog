@@ -30,13 +30,11 @@ class PostFactory extends Factory
         return [
             'user_id' => User::factory(),
             'category_id'=>Category::factory(),
-            'tag_id'=>Tag::factory(),
             'title' =>$this->faker->sentence,
             'excerpt'=>$this->faker->paragraph(2),
             'content'=>$this->faker->paragraphs(6,true),
             'thumbnail'=> "null",
             'slug'=>$this->faker->slug,
-            'published_at'=>$this->faker->dateTimeThisYear
         ];
     }
 }
